@@ -18,8 +18,7 @@ import com.mapbox.services.commons.geojson.Feature;
 import com.mapbox.services.commons.geojson.FeatureCollection;
 import com.mapbox.services.commons.geojson.Point;
 
-import java.net.MalformedURLException;
-import java.net.URL;
+import java.io.InputStream;
 
 import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.iconAllowOverlap;
 import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.iconImage;
@@ -43,24 +42,13 @@ public class MapLostActivity extends AppCompatActivity {
         mapView.getMapAsync(new OnMapReadyCallback() {
             @Override
             public void onMapReady(MapboxMap mapboxMap) {
-                try{
-                    URL geoJsonUrl = new URL("https://d2ad6b4ur7yvpq.cloudfront.net/naturalearth-3.3.0/ne_50m_urban_areas.geojson");
-                    GeoJsonSource source = new GeoJsonSource("urban-areas", geoJsonUrl);
-                    mapboxMap.addSource(source);
+
                     mapboxMap.addImage(
                             "my-marker-image",
                             BitmapFactory.decodeResource(MapLostActivity.this.getResources(),
                                     R.drawable.mapbox_marker_icon_default)
                     );
-
-                    double p1[] = {4.91638, 52.35673};
-                    double p2[] = {4.91638, 52.34673};
-                    FeatureCollection markers = FeatureCollection.fromFeatures(new Feature[] {
-                            Feature.fromGeometry(Point.fromCoordinates(p1)),
-                            Feature.fromGeometry(Point.fromCoordinates(p2))
-                    });
-                    Log.i("FEATURES: ", markers.toJson());
-                    mapboxMap.addSource(new GeoJsonSource("marker-source", markers));
+                    mapboxMap.addSource(new GeoJsonSource("marker-source", loadGeoJsonFromAsset()));
 
                     // Add the symbol-layer
                     mapboxMap.addLayer(
@@ -75,10 +63,7 @@ public class MapLostActivity extends AppCompatActivity {
                     );
 
                     // Show
-                    mapboxMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(52.35273, 4.91638), 14));
-                }catch (MalformedURLException ex){
-                    ex.printStackTrace();
-                }
+                    mapboxMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(42.81098654188819, -1.6432714462280273), 14));
             }
         });
     }
@@ -86,5 +71,24 @@ public class MapLostActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         finish();
+    }
+
+    private String loadGeoJsonFromAsset() {
+
+        try {
+            // Load GeoJSON file
+            InputStream is = getResources().openRawResource(R.raw.points);
+            int size = is.available();
+            byte[] buffer = new byte[size];
+            is.read(buffer);
+            is.close();
+            return new String(buffer, "UTF-8");
+
+        } catch (Exception exception) {
+            Log.e("StyleLineActivity", "Exception Loading GeoJSON: " + exception.toString());
+            exception.printStackTrace();
+            return null;
+        }
+
     }
 }
