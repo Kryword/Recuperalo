@@ -20,4 +20,9 @@ public class FirstActivity extends AppCompatActivity {
         Intent intent = new Intent(getApplicationContext(), MapActivity.class);
         startActivity(intent);
     }
+
+    public void perdido(View view){
+        Intent intent = new Intent(getApplicationContext(), MapLostActivity.class);
+        startActivity(intent);
+    }
 }
