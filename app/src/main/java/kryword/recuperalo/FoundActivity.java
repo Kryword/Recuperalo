@@ -16,7 +16,7 @@ public class FoundActivity extends AppCompatActivity {
         Intent intent = getIntent();
         Bundle bundle = intent.getExtras();
         lat = bundle.getDouble("lat");
-        lon = bundle.getDouble("lot");
+        lon = bundle.getDouble("long");
     }
 
     public void publicar(View view){

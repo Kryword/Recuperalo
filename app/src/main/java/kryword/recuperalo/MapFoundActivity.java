@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 
 import com.mapbox.mapboxsdk.Mapbox;
 import com.mapbox.mapboxsdk.annotations.MarkerOptions;
@@ -36,7 +37,7 @@ public class MapFoundActivity extends AppCompatActivity {
                         bundle.putDouble("lat", point.getLatitude());
                         bundle.putDouble("long", point.getLongitude());
                         intent.putExtras(bundle);
-                        startActivityForResult(intent, RESULT_OK);
+                        startActivityForResult(intent, 1);
                     }
                 });
             }
@@ -50,6 +51,7 @@ public class MapFoundActivity extends AppCompatActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        Log.i("Info", Integer.toString(resultCode));
         if (resultCode == RESULT_OK) {
             Bundle bundle = data.getExtras();
             final LatLng pos = new LatLng(bundle.getDouble("lat"), bundle.getDouble("long"));
@@ -57,7 +59,7 @@ public class MapFoundActivity extends AppCompatActivity {
             mapView.getMapAsync(new OnMapReadyCallback() {
                 @Override
                 public void onMapReady(final MapboxMap mapboxMap) {
-                    mapboxMap.addMarker(new MarkerOptions().setTitle(title).setPosition(pos));
+                    mapboxMap.addMarker(new MarkerOptions().title(title).position(pos));
                 }
             });
         }
