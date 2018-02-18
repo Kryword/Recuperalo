@@ -3,7 +3,7 @@
   "features": [
     {
       "type": "Feature",
-      "properties": {},
+      "properties": {"title":"Teléfono", "description": "Se trata de un Sony M4 Aqua que encontré hace un día en un banco justo al lado de la pescadería."},
       "geometry": {
         "type": "Point",
         "coordinates": [
@@ -14,7 +14,7 @@
     },
     {
       "type": "Feature",
-      "properties": {},
+      "properties": {"title":"Juguete", "description": "Es una figura de acción de marvel, quizás vale alrededor de 5 euros pero si alguien la ha perdido estoy dispuesto en devolversela."},
       "geometry": {
         "type": "Point",
         "coordinates": [
@@ -25,7 +25,7 @@
     },
     {
       "type": "Feature",
-      "properties": {},
+      "properties": {"title":"Anillo de oro", "description": "Un anillo de oro que parece ser de boda, espero que el dueño o dueña me contacte pronto."},
       "geometry": {
         "type": "Point",
         "coordinates": [

@@ -5,9 +5,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 
-import java.util.Iterator;
-import java.util.TreeSet;
-
 public class FirstActivity extends AppCompatActivity {
 
     @Override
@@ -17,7 +14,7 @@ public class FirstActivity extends AppCompatActivity {
     }
 
     public void encontrado(View view){
-        Intent intent = new Intent(getApplicationContext(), MapActivity.class);
+        Intent intent = new Intent(getApplicationContext(), MapFoundActivity.class);
         startActivity(intent);
     }
 

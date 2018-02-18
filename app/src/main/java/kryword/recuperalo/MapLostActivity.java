@@ -1,7 +1,9 @@
 package kryword.recuperalo;
 
+import android.content.Intent;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -15,10 +17,10 @@ import com.mapbox.mapboxsdk.maps.OnMapReadyCallback;
 import com.mapbox.mapboxsdk.style.layers.SymbolLayer;
 import com.mapbox.mapboxsdk.style.sources.GeoJsonSource;
 import com.mapbox.services.commons.geojson.Feature;
-import com.mapbox.services.commons.geojson.FeatureCollection;
 import com.mapbox.services.commons.geojson.Point;
 
 import java.io.InputStream;
+import java.util.List;
 
 import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.iconAllowOverlap;
 import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.iconImage;
@@ -36,20 +38,20 @@ public class MapLostActivity extends AppCompatActivity {
         setContentView(R.layout.activity_map_lost);
         Mapbox.getInstance(this, getString(R.string.access_token));
 
-        setContentView(R.layout.activity_map);
+        setContentView(R.layout.activity_map_found);
         mapView = (MapView)findViewById(R.id.mapView);
         mapView.onCreate(savedInstanceState);
         mapView.getMapAsync(new OnMapReadyCallback() {
             @Override
-            public void onMapReady(MapboxMap mapboxMap) {
+            public void onMapReady(final MapboxMap mapboxMap) {
 
                     mapboxMap.addImage(
                             "my-marker-image",
                             BitmapFactory.decodeResource(MapLostActivity.this.getResources(),
                                     R.drawable.mapbox_marker_icon_default)
                     );
-                    mapboxMap.addSource(new GeoJsonSource("marker-source", loadGeoJsonFromAsset()));
-
+                    GeoJsonSource source = new GeoJsonSource("marker-source", loadGeoJsonFromAsset());
+                    mapboxMap.addSource(source);
                     // Add the symbol-layer
                     mapboxMap.addLayer(
                             new SymbolLayer("marker-layer", "marker-source")
@@ -64,6 +66,27 @@ public class MapLostActivity extends AppCompatActivity {
 
                     // Show
                     mapboxMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(42.81098654188819, -1.6432714462280273), 14));
+
+                    mapboxMap.addOnMapClickListener(new MapboxMap.OnMapClickListener() {
+                        @Override
+                        public void onMapClick(@NonNull LatLng point) {
+                            List<Feature> in = mapboxMap.queryRenderedFeatures(mapboxMap.getProjection().toScreenLocation(point), "marker-layer");
+                            if(in.size()>0) {
+                                Feature feature = in.get(0);
+                                Point punto = (Point) feature.getGeometry();
+                                Intent intent = new Intent(getApplicationContext(), MarkerActivity.class);
+                                Bundle bundle = new Bundle();
+                                bundle.putString("title", feature.getStringProperty("title"));
+                                bundle.putString("description", feature.getStringProperty("description"));
+                                bundle.putDouble("long", punto.getCoordinates().getLongitude());
+                                bundle.putDouble("lat", punto.getCoordinates().getLatitude());
+                                intent.putExtras(bundle);
+                                startActivity(intent);
+
+                                Log.i("INFO", punto.getCoordinates().toString());
+                            }
+                        }
+                    });
             }
         });
     }
