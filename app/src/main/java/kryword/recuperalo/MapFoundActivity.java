@@ -1,5 +1,6 @@
 package kryword.recuperalo;
 
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -30,7 +31,12 @@ public class MapFoundActivity extends AppCompatActivity {
                 mapboxMap.addOnMapLongClickListener(new MapboxMap.OnMapLongClickListener() {
                     @Override
                     public void onMapLongClick(@NonNull LatLng point) {
-                        mapboxMap.addMarker(new MarkerOptions().title("Title").position(point));
+                        Intent intent = new Intent(getApplicationContext(), FoundActivity.class);
+                        Bundle bundle = new Bundle();
+                        bundle.putDouble("lat", point.getLatitude());
+                        bundle.putDouble("long", point.getLongitude());
+                        intent.putExtras(bundle);
+                        startActivityForResult(intent, RESULT_OK);
                     }
                 });
             }
@@ -40,5 +46,20 @@ public class MapFoundActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         finish();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode == RESULT_OK) {
+            Bundle bundle = data.getExtras();
+            final LatLng pos = new LatLng(bundle.getDouble("lat"), bundle.getDouble("long"));
+            final String title = bundle.getString("title");
+            mapView.getMapAsync(new OnMapReadyCallback() {
+                @Override
+                public void onMapReady(final MapboxMap mapboxMap) {
+                    mapboxMap.addMarker(new MarkerOptions().setTitle(title).setPosition(pos));
+                }
+            });
+        }
     }
 }

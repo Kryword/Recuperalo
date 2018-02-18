@@ -20,7 +20,8 @@
         </activity>
         <activity android:name=".MapFoundActivity" />
         <activity android:name=".MapLostActivity" />
-        <activity android:name=".MarkerActivity"></activity>
+        <activity android:name=".MarkerActivity" />
+        <activity android:name=".FoundActivity"></activity>
     </application>
 
 </manifest>
