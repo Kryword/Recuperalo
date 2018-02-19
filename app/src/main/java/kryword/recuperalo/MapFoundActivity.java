@@ -6,12 +6,15 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 
+import com.google.gson.JsonObject;
 import com.mapbox.mapboxsdk.Mapbox;
 import com.mapbox.mapboxsdk.annotations.MarkerOptions;
 import com.mapbox.mapboxsdk.geometry.LatLng;
 import com.mapbox.mapboxsdk.maps.MapView;
 import com.mapbox.mapboxsdk.maps.MapboxMap;
 import com.mapbox.mapboxsdk.maps.OnMapReadyCallback;
+import com.mapbox.services.commons.geojson.Feature;
+import com.mapbox.services.commons.geojson.Point;
 
 public class MapFoundActivity extends AppCompatActivity {
 
@@ -62,6 +65,11 @@ public class MapFoundActivity extends AppCompatActivity {
                     mapboxMap.addMarker(new MarkerOptions().title(title).position(pos));
                 }
             });
+            double[] d = {pos.getLongitude(), pos.getLatitude()};
+            JsonObject properties = new JsonObject();
+            properties.addProperty("title", title);
+            properties.addProperty("description", bundle.getString("description"));
+            UtilsForJson.addNewFeatureToJson(Feature.fromGeometry(Point.fromCoordinates(d), properties), this);
         }
     }
 }

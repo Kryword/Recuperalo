@@ -19,6 +19,8 @@ import com.mapbox.mapboxsdk.style.sources.GeoJsonSource;
 
 import java.io.InputStream;
 
+import okhttp3.internal.Util;
+
 import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.iconAllowOverlap;
 import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.iconImage;
 import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.textColor;
@@ -52,7 +54,7 @@ public class MarkerActivity extends AppCompatActivity {
                         BitmapFactory.decodeResource(MarkerActivity.this.getResources(),
                                 R.drawable.mapbox_marker_icon_default)
                 );
-                GeoJsonSource source = new GeoJsonSource("marker-source", loadGeoJsonFromAsset());
+                GeoJsonSource source = new GeoJsonSource("marker-source", UtilsForJson.loadGeoJsonFromAsset(MarkerActivity.this));
                 mapboxMap.addSource(source);
                 // Add the symbol-layer
                 mapboxMap.addLayer(
@@ -74,24 +76,5 @@ public class MarkerActivity extends AppCompatActivity {
     public void onBackPressed() {
         mapView.onDestroy();
         finish();
-    }
-
-    private String loadGeoJsonFromAsset() {
-
-        try {
-            // Load GeoJSON file
-            InputStream is = getResources().openRawResource(R.raw.points);
-            int size = is.available();
-            byte[] buffer = new byte[size];
-            is.read(buffer);
-            is.close();
-            return new String(buffer, "UTF-8");
-
-        } catch (Exception exception) {
-            Log.e("StyleLineActivity", "Exception Loading GeoJSON: " + exception.toString());
-            exception.printStackTrace();
-            return null;
-        }
-
     }
 }

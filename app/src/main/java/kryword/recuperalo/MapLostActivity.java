@@ -8,6 +8,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 
+import com.google.gson.JsonObject;
 import com.mapbox.mapboxsdk.Mapbox;
 import com.mapbox.mapboxsdk.camera.CameraUpdateFactory;
 import com.mapbox.mapboxsdk.geometry.LatLng;
@@ -37,8 +38,6 @@ public class MapLostActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_map_lost);
         Mapbox.getInstance(this, getString(R.string.access_token));
-
-        setContentView(R.layout.activity_map_found);
         mapView = (MapView)findViewById(R.id.mapView);
         mapView.onCreate(savedInstanceState);
         mapView.getMapAsync(new OnMapReadyCallback() {
@@ -50,7 +49,8 @@ public class MapLostActivity extends AppCompatActivity {
                             BitmapFactory.decodeResource(MapLostActivity.this.getResources(),
                                     R.drawable.mapbox_marker_icon_default)
                     );
-                    GeoJsonSource source = new GeoJsonSource("marker-source", loadGeoJsonFromAsset());
+                    GeoJsonSource source = new GeoJsonSource("marker-source", UtilsForJson.loadGeoJsonFromAsset(MapLostActivity.this));
+
                     mapboxMap.addSource(source);
                     // Add the symbol-layer
                     mapboxMap.addLayer(
