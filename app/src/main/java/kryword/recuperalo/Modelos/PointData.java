@@ -7,7 +7,12 @@ package kryword.recuperalo.Modelos;
 public class PointData {
     private String title;
     private String description;
-    PointData(){}
+    public PointData(){}
+
+    public PointData(String title, String description){
+        this.title = title;
+        this.description = description;
+    }
 
     public void setTitle(String title) {
         this.title = title;
