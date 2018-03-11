@@ -95,23 +95,4 @@ public class MapLostActivity extends AppCompatActivity {
     public void onBackPressed() {
         finish();
     }
-
-    private String loadGeoJsonFromAsset() {
-
-        try {
-            // Load GeoJSON file
-            InputStream is = getResources().openRawResource(R.raw.points);
-            int size = is.available();
-            byte[] buffer = new byte[size];
-            is.read(buffer);
-            is.close();
-            return new String(buffer, "UTF-8");
-
-        } catch (Exception exception) {
-            Log.e("StyleLineActivity", "Exception Loading GeoJSON: " + exception.toString());
-            exception.printStackTrace();
-            return null;
-        }
-
-    }
 }
