@@ -6,9 +6,30 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="kryword.recuperalo.MapLostActivity">
+
     <com.mapbox.mapboxsdk.maps.MapView
         android:id="@+id/mapView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        mapbox:mapbox_styleUrl="mapbox://styles/kryword/cjdj5oyjzh2ek2rlchmqymzjk"></com.mapbox.mapboxsdk.maps.MapView>
+        mapbox:mapbox_styleUrl="mapbox://styles/kryword/cjdj5oyjzh2ek2rlchmqymzjk">
+    </com.mapbox.mapboxsdk.maps.MapView>
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/focusMap"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:clickable="true"
+        android:focusable="true"
+        android:onClick="updatePosition"
+        android:visibility="visible"
+        app:backgroundTint="@android:color/darker_gray"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.953"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.966"
+        app:rippleColor="@android:color/holo_blue_bright"
+        mapbox:srcCompat="@drawable/mapbox_mylocation_icon_bearing" />
+
 </android.support.constraint.ConstraintLayout>
