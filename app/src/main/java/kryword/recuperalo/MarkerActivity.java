@@ -1,5 +1,6 @@
 package kryword.recuperalo;
 
+import android.app.Application;
 import android.content.Intent;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
@@ -9,6 +10,7 @@ import android.util.Log;
 import android.widget.TextView;
 
 import com.mapbox.mapboxsdk.Mapbox;
+import com.mapbox.mapboxsdk.annotations.MarkerOptions;
 import com.mapbox.mapboxsdk.camera.CameraUpdateFactory;
 import com.mapbox.mapboxsdk.geometry.LatLng;
 import com.mapbox.mapboxsdk.maps.MapView;
@@ -19,6 +21,7 @@ import com.mapbox.mapboxsdk.style.sources.GeoJsonSource;
 
 import java.io.InputStream;
 
+import kryword.recuperalo.Modelos.ObjetoEncontrado;
 import okhttp3.internal.Util;
 
 import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.iconAllowOverlap;
@@ -30,20 +33,30 @@ import static com.mapbox.mapboxsdk.style.layers.PropertyFactory.textSize;
 public class MarkerActivity extends AppCompatActivity {
 
     MapView mapView;
+    MainApplication ma;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_marker);
+        ma = (MainApplication)getApplicationContext();
         Intent intent = getIntent();
         Bundle bundle = intent.getExtras();
-        TextView title = (TextView) findViewById(R.id.title);
+        final TextView title = (TextView) findViewById(R.id.title);
         TextView description = (TextView) findViewById(R.id.description);
-        title.setText(bundle.getString("title"));
-        description.setText(bundle.getString("description"));
-        final LatLng position = new LatLng(bundle.getDouble("lat"), bundle.getDouble("long"));
-        Mapbox.getInstance(this, getString(R.string.access_token));
 
+        // Este es el id del marcador dentro de la lista de puntos, puedo usar esto para obtener todos los datos
+        final int markerId = (int)bundle.getLong("id");
+        // Objeto dentro de la lista correspondiente al marcador
+        ObjetoEncontrado objeto = ma.list.get(markerId);
+        final String objTitle = objeto.getTitle();
+        final String objDescription = objeto.getDescription();
+        final LatLng position = objeto.getLatLngPosition();
+        // Relleno los campos del título y la descripción con los datos obtenidos del objeto
+        title.setText(objTitle);
+        description.setText(objDescription);
+        Mapbox.getInstance(this, getString(R.string.access_token));
+        Log.i("Datos del objeto:", position + "; " + objTitle + "; " + objDescription);
         mapView = (MapView)findViewById(R.id.viewMap);
         mapView.onCreate(savedInstanceState);
         mapView.getMapAsync(new OnMapReadyCallback() {
@@ -54,19 +67,10 @@ public class MarkerActivity extends AppCompatActivity {
                         BitmapFactory.decodeResource(MarkerActivity.this.getResources(),
                                 R.drawable.mapbox_marker_icon_default)
                 );
-                GeoJsonSource source = new GeoJsonSource("marker-source", UtilsForJson.loadGeoJsonFromAsset(MarkerActivity.this));
-                mapboxMap.addSource(source);
-                // Add the symbol-layer
-                mapboxMap.addLayer(
-                        new SymbolLayer("marker-layer", "marker-source")
-                                .withProperties(
-                                        iconImage("my-marker-image"),
-                                        iconAllowOverlap(true),
-                                        textField("{title}"),
-                                        textColor(Color.RED),
-                                        textSize(10f)
-                                )
-                );
+                mapboxMap.addMarker(new MarkerOptions()
+                        .position(position)
+                        .title(objTitle)
+                        .setSnippet(objDescription));
                 mapboxMap.moveCamera(CameraUpdateFactory.newLatLng(position));
             }
         });

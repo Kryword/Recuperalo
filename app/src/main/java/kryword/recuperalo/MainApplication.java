@@ -8,7 +8,7 @@ import com.parse.ParseObject;
 import java.util.ArrayList;
 import java.util.List;
 
-import kryword.recuperalo.Modelos.Punto;
+import kryword.recuperalo.Modelos.ObjetoEncontrado;
 
 /**
  * Created by Kryword on 11/03/2018.
@@ -16,12 +16,12 @@ import kryword.recuperalo.Modelos.Punto;
 
 public class MainApplication extends Application {
 
-    public List<Punto> list = new ArrayList<>();
+    public List<ObjetoEncontrado> list = new ArrayList<>();
 
     @Override
     public void onCreate() {
         super.onCreate();
-        ParseObject.registerSubclass(Punto.class);
+        ParseObject.registerSubclass(ObjetoEncontrado.class);
 
         Parse.initialize(new Parse.Configuration.Builder(getApplicationContext())
                 .applicationId("myAppId") //si no has cambiado APP_ID, sino pon el valor de APP_ID

@@ -25,15 +25,20 @@ import com.parse.ParseQuery;
 
 import java.util.List;
 
-import kryword.recuperalo.Modelos.Punto;
+import kryword.recuperalo.Modelos.ObjetoEncontrado;
 
 public class MapLostActivity extends AppCompatActivity {
 
+    /**
+     * Estas constantes permiten cambiar los datos de forma más fácil y visible
+     */
     private final double ZOOM = 14f;
+    private final double LATITUDE_PAMPLONA = 42.8157961;
+    private final double LONGITUDE_PAMPLONA = -1.6675312;
 
     MapView mapView;
     MainApplication ma;
-    boolean newPos; // Esto me sirve para mantener el conocimiento de si hay que actualizar posición de cámara o no
+    boolean newPos; // Esto sirve para mantener el conocimiento de si hay que actualizar posición de cámara o no
     LatLng position;
 
     @Override
@@ -42,7 +47,7 @@ public class MapLostActivity extends AppCompatActivity {
         setContentView(R.layout.activity_map_lost);
 
         // Posición por defecto, es el centro de Pamplona.
-        position = new LatLng(42.8157961, -1.6675312);
+        position = new LatLng(LATITUDE_PAMPLONA, LONGITUDE_PAMPLONA);
         newPos = true;
 
         ma = (MainApplication) this.getApplicationContext();
@@ -64,10 +69,7 @@ public class MapLostActivity extends AppCompatActivity {
                     public boolean onMarkerClick(Marker marker) {
                         Intent intent = new Intent(getApplicationContext(), MarkerActivity.class);
                         Bundle bundle = new Bundle();
-                        bundle.putString("title", marker.getTitle());
-                        bundle.putString("description", marker.getSnippet());
-                        bundle.putDouble("long", marker.getPosition().getLongitude());
-                        bundle.putDouble("lat", marker.getPosition().getLatitude());
+                        bundle.putLong("id", marker.getId());
                         intent.putExtras(bundle);
                         startActivity(intent);
                         return true;
@@ -86,9 +88,9 @@ public class MapLostActivity extends AppCompatActivity {
     }
 
     private void getList() {
-        ParseQuery<Punto> query = ParseQuery.getQuery("Punto");
-        query.findInBackground(new FindCallback<Punto>() {
-            public void done(List<Punto> objects, ParseException e) {
+        ParseQuery<ObjetoEncontrado> query = ParseQuery.getQuery("ObjetoEncontrado");
+        query.findInBackground(new FindCallback<ObjetoEncontrado>() {
+            public void done(List<ObjetoEncontrado> objects, ParseException e) {
                 if (e == null) {
                     ma.list = objects;
                     Log.v("query OK ", "getList()");
@@ -105,8 +107,11 @@ public class MapLostActivity extends AppCompatActivity {
             @Override
             public void onMapReady(MapboxMap mapboxMap) {
                 Toast.makeText(getBaseContext(), "Actualizado el mapa", Toast.LENGTH_SHORT).show();
-                for (Punto punto : ma.list) {
-                    mapboxMap.addMarker(new MarkerOptions().position(punto.getPos()).title(punto.getData().getTitle()).setSnippet(punto.getData().getDescription()));
+                for (ObjetoEncontrado objeto: ma.list) {
+                    mapboxMap.addMarker(new MarkerOptions()
+                            .position(objeto.getLatLngPosition())
+                            .title(objeto.getTitle())
+                            .setSnippet(objeto.getDescription()));
                 }
                 if (newPos) {
                     mapboxMap.moveCamera(CameraUpdateFactory.newLatLngZoom(position, ZOOM));
