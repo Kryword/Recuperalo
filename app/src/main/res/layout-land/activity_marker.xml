@@ -18,26 +18,26 @@
         android:text="Title"
         android:textSize="18sp"
         app:layout_constraintBottom_toTopOf="@+id/description"
-        app:layout_constraintEnd_toStartOf="@+id/viewMap"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/viewMap"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/description"
         android:layout_width="0dp"
-        android:layout_height="0dp"
+        android:layout_height="137dp"
         android:layout_marginBottom="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="8dp"
         android:maxLines="25"
         android:scrollHorizontally="false"
         android:scrollbars="vertical"
         android:text="Description"
         android:textSize="16sp"
         app:layout_constraintBottom_toTopOf="@+id/contact"
-        app:layout_constraintEnd_toStartOf="@+id/viewMap"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/viewMap"
         app:layout_constraintTop_toBottomOf="@+id/title" />
 
     <Button
@@ -50,8 +50,8 @@
         android:layout_marginTop="8dp"
         android:text="Contactar"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/viewMap"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/viewMap"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/description" />
 
     <com.mapbox.mapboxsdk.maps.MapView
@@ -59,11 +59,12 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginBottom="8dp"
-        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/description"
+        app:layout_constraintEnd_toStartOf="@+id/description"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:mapbox_styleUrl="mapbox://styles/kryword/cjdj5oyjzh2ek2rlchmqymzjk"></com.mapbox.mapboxsdk.maps.MapView>
 </android.support.constraint.ConstraintLayout>
