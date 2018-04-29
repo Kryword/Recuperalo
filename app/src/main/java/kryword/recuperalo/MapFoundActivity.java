@@ -6,6 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.mapbox.mapboxsdk.Mapbox;
 import com.mapbox.mapboxsdk.annotations.MarkerOptions;
 import com.mapbox.mapboxsdk.geometry.LatLng;
@@ -73,15 +74,20 @@ public class MapFoundActivity extends AppCompatActivity {
                     mapboxMap.addMarker(new MarkerOptions().title(title).position(pos));
                 }
             });
-            addNewPoint(title, description, pos);
+            FirebaseAuth mAuth = FirebaseAuth.getInstance();
+            String uid = mAuth.getCurrentUser().getUid();
+            String name = mAuth.getCurrentUser().getDisplayName();
+            addNewPoint(title, description, pos, uid, name);
         }
     }
 
-    private void addNewPoint(String title, String description, LatLng pos){
+    private void addNewPoint(String title, String description, LatLng pos, String uid, String name){
         final ObjetoEncontrado objeto = new ObjetoEncontrado();
         objeto.setTitle(title);
         objeto.setDescription(description);
         objeto.setPosition(pos);
+        objeto.setUid(uid);
+        objeto.setName(name);
         objeto.saveInBackground(new SaveCallback() {
             @Override
             public void done(ParseException e) {

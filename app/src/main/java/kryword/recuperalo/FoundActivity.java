@@ -12,7 +12,6 @@ public class FoundActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_found);
-
         Intent intent = getIntent();
         Bundle bundle = intent.getExtras();
         lat = bundle.getDouble("lat");

@@ -6,8 +6,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
+import android.widget.Button;
 import android.widget.TextView;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.mapbox.mapboxsdk.Mapbox;
 import com.mapbox.mapboxsdk.annotations.MarkerOptions;
 import com.mapbox.mapboxsdk.camera.CameraUpdateFactory;
@@ -35,6 +37,7 @@ public class MarkerActivity extends AppCompatActivity {
         Bundle bundle = intent.getExtras();
         final TextView title = (TextView) findViewById(R.id.title);
         TextView description = (TextView) findViewById(R.id.description);
+        Button button = (Button) findViewById(R.id.contact);
 
         // Este es el id del marcador dentro de la lista de puntos, puedo usar esto para obtener todos los datos
         final int markerId = (int)bundle.getLong("id");
@@ -43,6 +46,9 @@ public class MarkerActivity extends AppCompatActivity {
         final String objTitle = objeto.getTitle();
         final String objDescription = objeto.getDescription();
         final LatLng position = objeto.getLatLngPosition();
+        if (objeto.getName()!=null) {
+            button.setText("Contactar con " + objeto.getName());
+        }
         // Relleno los campos del título y la descripción con los datos obtenidos del objeto
         title.setText(objTitle);
         description.setText(objDescription);

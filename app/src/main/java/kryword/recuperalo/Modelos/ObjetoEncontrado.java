@@ -10,6 +10,16 @@ public class ObjetoEncontrado extends ParseObject{
     private String title;
     private String description;
     private ParseGeoPoint position;
+    private String uid;
+    private String name;
+
+    public void setName(String name) {
+        put("name", name);
+    }
+
+    public void setUid(String uid) {
+        put("uid", uid);
+    }
 
     public void setDescription(String description) {
         put("description", description);
@@ -46,5 +56,13 @@ public class ObjetoEncontrado extends ParseObject{
     public LatLng getLatLngPosition(){
         ParseGeoPoint parsePoint = getPosition();
         return new LatLng(parsePoint.getLatitude(), parsePoint.getLongitude());
+    }
+
+    public String getUid() {
+        return getString("uid");
+    }
+
+    public String getName() {
+        return getString("name");
     }
 }
