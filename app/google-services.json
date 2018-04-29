@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "237049492078",
+    "firebase_url": "https://recuperalopp.firebaseio.com",
+    "project_id": "recuperalopp",
+    "storage_bucket": "recuperalopp.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:237049492078:android:9d23d4dc53e167bd",
+        "android_client_info": {
+          "package_name": "kryword.recuperalo"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "237049492078-fel6qdfvpcule7jee7iiomgk32qvaav3.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "kryword.recuperalo",
+            "certificate_hash": "886eb57bf5abf9b6948f53e819a06458881a35d3"
+          }
+        },
+        {
+          "client_id": "237049492078-g9anm7psclrtapqh4ekp1pvbi45usjmc.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDOxYjQgUTJf-XIPBi1HNQ6cdKw5hoahOA"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "237049492078-g9anm7psclrtapqh4ekp1pvbi45usjmc.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
