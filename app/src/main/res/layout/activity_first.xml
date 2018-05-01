@@ -33,7 +33,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@id/userName"
         app:layout_constraintVertical_chainStyle="spread_inside"
-        app:srcCompat="@drawable/ic_lost_items" />
+        app:srcCompat="@drawable/ic_lost_items_new" />
 
     <Button
         android:id="@+id/button"

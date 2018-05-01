@@ -83,6 +83,6 @@
         app:layout_constraintTop_toBottomOf="@id/userName"
         app:layout_constraintVertical_bias="0.019"
         app:layout_constraintVertical_chainStyle="spread_inside"
-        app:srcCompat="@drawable/ic_lost_items" />
+        app:srcCompat="@drawable/ic_lost_items_new" />
 
 </android.support.constraint.ConstraintLayout>
