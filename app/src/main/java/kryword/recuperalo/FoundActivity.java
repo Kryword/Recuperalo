@@ -8,6 +8,9 @@ import android.widget.EditText;
 
 public class FoundActivity extends AppCompatActivity {
     Double lat, lon;
+    String title, description;
+    EditText titleText;
+    EditText descriptionText;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -16,6 +19,17 @@ public class FoundActivity extends AppCompatActivity {
         Bundle bundle = intent.getExtras();
         lat = bundle.getDouble("lat");
         lon = bundle.getDouble("long");
+        title = bundle.getString("title");
+        description = bundle.getString("description");
+
+        titleText = findViewById(R.id.title);
+        descriptionText = findViewById(R.id.description);
+        if (title != null){
+            titleText.setText(title);
+        }
+        if (description != null){
+            descriptionText.setText(description);
+        }
     }
 
     public void publicar(View view){
@@ -23,10 +37,10 @@ public class FoundActivity extends AppCompatActivity {
         Bundle bundle = new Bundle();
         bundle.putDouble("lat", lat);
         bundle.putDouble("long", lon);
-        EditText title = (EditText) findViewById(R.id.title);
-        EditText description = (EditText) findViewById(R.id.description);
-        bundle.putString("title", title.getText().toString());
-        bundle.putString("description", description.getText().toString());
+        title = titleText.getText().toString();
+        description = descriptionText.getText().toString();
+        bundle.putString("title", title);
+        bundle.putString("description", description);
         intent.putExtras(bundle);
         setResult(RESULT_OK, intent);
         finish();

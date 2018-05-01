@@ -1,16 +1,19 @@
 package kryword.recuperalo;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.mapbox.mapboxsdk.geometry.LatLng;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
@@ -31,9 +34,21 @@ public class FilterActivity extends AppCompatActivity {
         setContentView(R.layout.activity_filter);
         ma = (MainApplication) getApplicationContext();
         list = (ListView) findViewById(R.id.list_view);
-        List<ObjetoEncontrado> lista = new ArrayList<>(ma.list);
+        final List<ObjetoEncontrado> lista = new ArrayList<>(ma.list);
         myAdapter = new MyAdapter(this, lista);
         list.setAdapter(myAdapter);
+        list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
+                Intent intent = new Intent(getApplicationContext(), MarkerActivity.class);
+                Bundle bundle = new Bundle();
+                LatLng pos = lista.get(position).getLatLngPosition();
+                bundle.putDouble("lat", pos.getLatitude());
+                bundle.putDouble("long", pos.getLongitude());
+                intent.putExtras(bundle);
+                startActivity(intent);
+            }
+        });
     }
 
     public void filterMyObjects(View view){
