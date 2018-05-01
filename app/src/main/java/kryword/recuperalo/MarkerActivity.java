@@ -40,9 +40,9 @@ public class MarkerActivity extends AppCompatActivity {
         Button button = (Button) findViewById(R.id.contact);
 
         // Este es el id del marcador dentro de la lista de puntos, puedo usar esto para obtener todos los datos
-        final int markerId = (int)bundle.getLong("id");
+        LatLng markerPos = new LatLng(bundle.getDouble("lat"), bundle.getDouble("long"));
         // Objeto dentro de la lista correspondiente al marcador
-        ObjetoEncontrado objeto = ma.list.get(markerId);
+        ObjetoEncontrado objeto = findObject(markerPos);
         final String objTitle = objeto.getTitle();
         final String objDescription = objeto.getDescription();
         final LatLng position = objeto.getLatLngPosition();
@@ -83,5 +83,14 @@ public class MarkerActivity extends AppCompatActivity {
             mapView.onDestroy();
         }
         finish();
+    }
+
+    private ObjetoEncontrado findObject(LatLng position){
+        for (ObjetoEncontrado objetoEncontrado: ma.list){
+            if(objetoEncontrado.getPosition().getLatitude() == position.getLatitude() && objetoEncontrado.getPosition().getLongitude() == position.getLongitude()){
+                return objetoEncontrado;
+            }
+        }
+        return null;
     }
 }

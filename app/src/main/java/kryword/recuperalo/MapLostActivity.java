@@ -41,6 +41,9 @@ public class MapLostActivity extends AppCompatActivity {
     boolean newPos; // Esto sirve para mantener el conocimiento de si hay que actualizar posición de cámara o no
     LatLng position;
 
+    List<Marker> markers;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -52,10 +55,10 @@ public class MapLostActivity extends AppCompatActivity {
 
         ma = (MainApplication) this.getApplicationContext();
         getList();
-
         Mapbox.getInstance(this, getString(R.string.access_token));
         mapView = (MapView) findViewById(R.id.mapView);
         mapView.onCreate(savedInstanceState);
+
         mapView.getMapAsync(new OnMapReadyCallback() {
             @Override
             public void onMapReady(final MapboxMap mapboxMap) {
@@ -69,7 +72,8 @@ public class MapLostActivity extends AppCompatActivity {
                     public boolean onMarkerClick(Marker marker) {
                         Intent intent = new Intent(getApplicationContext(), MarkerActivity.class);
                         Bundle bundle = new Bundle();
-                        bundle.putLong("id", marker.getId());
+                        bundle.putDouble("lat", marker.getPosition().getLatitude());
+                        bundle.putDouble("long", marker.getPosition().getLongitude());
                         intent.putExtras(bundle);
                         startActivity(intent);
                         return true;
@@ -77,9 +81,6 @@ public class MapLostActivity extends AppCompatActivity {
                 });
             }
         });
-
-        // Actualizo mapa
-        updateMap();
     }
 
     @Override
@@ -106,6 +107,10 @@ public class MapLostActivity extends AppCompatActivity {
         mapView.getMapAsync(new OnMapReadyCallback() {
             @Override
             public void onMapReady(MapboxMap mapboxMap) {
+                markers = mapboxMap.getMarkers();
+                for (Marker marker : markers) {
+                    mapboxMap.removeMarker(marker);
+                }
                 Toast.makeText(getBaseContext(), "Actualizado el mapa", Toast.LENGTH_SHORT).show();
                 for (ObjetoEncontrado objeto: ma.list) {
                     mapboxMap.addMarker(new MarkerOptions()
@@ -147,5 +152,18 @@ public class MapLostActivity extends AppCompatActivity {
             }
         }
         return bestLocation;
+    }
+
+    public void filterResults(View view){
+        Intent intent = new Intent(getApplicationContext(), FilterActivity.class);
+        startActivityForResult(intent, 123);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 123 && resultCode == RESULT_OK){
+            updateMap();
+        }
     }
 }

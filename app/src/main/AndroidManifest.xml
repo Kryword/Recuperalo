@@ -3,7 +3,7 @@
     package="kryword.recuperalo">
 
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
 
     <application
         android:name=".MainApplication"
@@ -23,7 +23,8 @@
         <activity android:name=".MapFoundActivity" />
         <activity android:name=".MapLostActivity" />
         <activity android:name=".MarkerActivity" />
-        <activity android:name=".FoundActivity"></activity>
+        <activity android:name=".FoundActivity" />
+        <activity android:name=".FilterActivity"></activity>
     </application>
 
 </manifest>
