@@ -79,6 +79,7 @@ public class MarkerActivity extends AppCompatActivity {
         // Relleno los campos del título y la descripción con los datos obtenidos del objeto
         title.setText(objTitle);
         description.setText(objDescription);
+        ((TextView) findViewById(R.id.userName)).setText(objeto.getName());
         Log.i("Datos del objeto:", position + "; " + objTitle + "; " + objDescription);
 
         Mapbox.getInstance(this, getString(R.string.access_token));
