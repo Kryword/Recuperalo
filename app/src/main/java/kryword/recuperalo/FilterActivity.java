@@ -42,7 +42,7 @@ public class FilterActivity extends AppCompatActivity {
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
                 Intent intent = new Intent(getApplicationContext(), MarkerActivity.class);
                 Bundle bundle = new Bundle();
-                LatLng pos = lista.get(position).getLatLngPosition();
+                LatLng pos = myAdapter.data.get(position).getLatLngPosition();
                 bundle.putDouble("lat", pos.getLatitude());
                 bundle.putDouble("long", pos.getLongitude());
                 intent.putExtras(bundle);
