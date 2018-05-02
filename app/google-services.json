@@ -15,6 +15,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "237049492078-ut1c80nu0e9j74i5sa3j8i3d61l1ms5u.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "kryword.recuperalo",
+            "certificate_hash": "73f0fecb67769c2f7094871ecf1d406db78f823b"
+          }
+        },
+        {
           "client_id": "237049492078-fel6qdfvpcule7jee7iiomgk32qvaav3.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
