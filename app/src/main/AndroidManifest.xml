@@ -24,7 +24,9 @@
         <activity android:name=".MapLostActivity" />
         <activity android:name=".MarkerActivity" />
         <activity android:name=".FoundActivity" />
-        <activity android:name=".FilterActivity"></activity>
+        <activity android:name=".FilterActivity" />
+        <activity android:name=".ChatListActivity" />
+        <activity android:name=".ChatActivity"></activity>
     </application>
 
 </manifest>

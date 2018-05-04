@@ -69,4 +69,9 @@ public class FirstActivity extends AppCompatActivity {
             tv.setText("Conectado como " + currentUser.getDisplayName());
         }
     }
+
+    public void listaChats(View view){
+        Intent intent = new Intent(getApplicationContext(), ChatListActivity.class);
+        startActivity(intent);
+    }
 }

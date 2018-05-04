@@ -13,6 +13,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.FirebaseDatabase;
 import com.mapbox.mapboxsdk.Mapbox;
 import com.mapbox.mapboxsdk.annotations.MarkerOptions;
 import com.mapbox.mapboxsdk.camera.CameraUpdateFactory;
@@ -28,6 +29,7 @@ import com.parse.SaveCallback;
 
 import java.util.List;
 
+import kryword.recuperalo.Modelos.Chat;
 import kryword.recuperalo.Modelos.ObjetoEncontrado;
 
 public class MarkerActivity extends AppCompatActivity {
@@ -54,12 +56,35 @@ public class MarkerActivity extends AppCompatActivity {
         // Este es el id del marcador dentro de la lista de puntos, puedo usar esto para obtener todos los datos
         LatLng markerPos = new LatLng(bundle.getDouble("lat"), bundle.getDouble("long"));
         // Objeto dentro de la lista correspondiente al marcador
-        ObjetoEncontrado objeto = findObject(markerPos);
+        final ObjetoEncontrado objeto = findObject(markerPos);
         final String objTitle = objeto.getTitle();
         final String objDescription = objeto.getDescription();
         final LatLng position = objeto.getLatLngPosition();
         if (objeto.getName()!=null && !objeto.getUid().equals(FirebaseAuth.getInstance().getUid())) {
             button.setText("Contactar con " + objeto.getName());
+            button.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    String receiverId = objeto.getUid();
+                    String receiverName = objeto.getName();
+                    String senderId = FirebaseAuth.getInstance().getUid();
+                    String senderName = FirebaseAuth.getInstance().getCurrentUser().getDisplayName();
+                    String chatTitle = objeto.getTitle();
+                    Chat chat = new Chat(senderId+":"+receiverId, senderId, senderName, receiverId, receiverName, chatTitle);
+                    // Creo el nuevo chat y lo envío a la base de datos.
+                    FirebaseDatabase.getInstance().getReference("chats").child(senderId+":"+receiverId).setValue(chat);
+
+                    // Creo un intent e inicio la actividad de chat con el id del chat obtenido de antes
+                    Intent intent = new Intent(getApplicationContext(), ChatActivity.class);
+                    Bundle bundle = new Bundle();
+                    bundle.putString("id", chat.getId());
+                    bundle.putString("senderName", chat.getSenderName());
+                    bundle.putString("receiverName", chat.getReceiverName());
+                    bundle.putString("topic", chat.getTopic());
+                    intent.putExtras(bundle);
+                    startActivity(intent);
+                }
+            });
         }else if (objeto.getName() != null && objeto.getUid().equals(FirebaseAuth.getInstance().getUid())){
             button.setText("Modificar objeto encontrado");
             button.setOnClickListener(new View.OnClickListener() {
