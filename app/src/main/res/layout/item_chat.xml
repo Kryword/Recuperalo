@@ -10,5 +10,6 @@
         android:layout_weight="1"
         android:text="Chat Name"
         android:textSize="20sp"
-        android:textColor="@color/colorText"/>
+        android:textColor="@color/colorText"
+        android:paddingLeft="5dp"/>
 </android.widget.LinearLayout>

@@ -23,7 +23,7 @@ import kryword.recuperalo.Modelos.Message;
 public class ChatActivity extends AppCompatActivity {
 
     ListView chatList;
-    ArrayAdapter<Message> adapter;
+    MessageAdapter adapter;
     String id;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,13 +39,14 @@ public class ChatActivity extends AppCompatActivity {
         chatTitle.setText("Chat entre " + senderName + " y " + receiverName + " sobre " + topic);
 
         chatList = findViewById(R.id.messageList);
-        adapter = new ArrayAdapter<>(getApplicationContext(), R.layout.item_message, R.id.textView);
+        adapter = new MessageAdapter(this);
         chatList.setAdapter(adapter);
         FirebaseDatabase.getInstance().getReference().child("messages").child(this.id).addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 if (dataSnapshot.exists()) {
-                    adapter.add(dataSnapshot.getValue(Message.class));
+                    Message message = dataSnapshot.getValue(Message.class);
+                    adapter.add(message);
                     adapter.notifyDataSetChanged();
                 }
             }
