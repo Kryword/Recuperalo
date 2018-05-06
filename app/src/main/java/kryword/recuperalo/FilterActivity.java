@@ -7,7 +7,6 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
@@ -20,29 +19,29 @@ import com.parse.ParseQuery;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Consumer;
 
 import kryword.recuperalo.Modelos.ObjetoEncontrado;
 
 public class FilterActivity extends AppCompatActivity {
-    MainApplication ma;
-    MyAdapter myAdapter;
-    ListView list;
+    private MainApplication ma;
+    private FilterAdapter filterAdapter;
+    private ListView list;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_filter);
         ma = (MainApplication) getApplicationContext();
-        list = (ListView) findViewById(R.id.list_view);
+        list = findViewById(R.id.filterList);
         final List<ObjetoEncontrado> lista = new ArrayList<>(ma.list);
-        myAdapter = new MyAdapter(this, lista);
-        list.setAdapter(myAdapter);
+        filterAdapter = new FilterAdapter(this, lista);
+        list.setAdapter(filterAdapter);
         list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
                 Intent intent = new Intent(getApplicationContext(), MarkerActivity.class);
                 Bundle bundle = new Bundle();
-                LatLng pos = myAdapter.data.get(position).getLatLngPosition();
+                LatLng pos = ((ObjetoEncontrado)filterAdapter.getItem(position)).getLatLngPosition();
                 bundle.putDouble("lat", pos.getLatitude());
                 bundle.putDouble("long", pos.getLongitude());
                 intent.putExtras(bundle);
@@ -54,31 +53,31 @@ public class FilterActivity extends AppCompatActivity {
     public void filterMyObjects(View view){
         String myUid = FirebaseAuth.getInstance().getUid();
         List<ObjetoEncontrado> objetos = new ArrayList<>();
-        myAdapter = new MyAdapter(getApplicationContext(), new ArrayList<ObjetoEncontrado>(ma.list));
+        filterAdapter = new FilterAdapter(getApplicationContext(), new ArrayList<>(ma.list));
         for (ObjetoEncontrado objetoEncontrado : ma.list) {
             if (objetoEncontrado.getUid() == null || !objetoEncontrado.getUid().equals(myUid)){
                 objetos.add(objetoEncontrado);
             }
         }
         for (ObjetoEncontrado objeto : objetos) {
-            myAdapter.remove(objeto);
+            filterAdapter.remove(objeto);
         }
-        list.setAdapter(myAdapter);
+        list.setAdapter(filterAdapter);
     }
 
     public void filterObjects(View view){
-        EditText editText = (EditText) findViewById(R.id.editText);
+        EditText editText = findViewById(R.id.filterText);
         String word = editText.getText().toString();
         if (!TextUtils.isEmpty(word)) {
             List<ObjetoEncontrado> objetos = new ArrayList<>();
-            myAdapter = new MyAdapter(getApplicationContext(), new ArrayList<ObjetoEncontrado>(ma.list));
+            filterAdapter = new FilterAdapter(getApplicationContext(), new ArrayList<>(ma.list));
             for (ObjetoEncontrado objetoEncontrado : ma.list) {
-                if (objetoEncontrado.getTitle().toLowerCase().indexOf(word.toLowerCase()) == -1){
+                if (!objetoEncontrado.getTitle().toLowerCase().contains(word.toLowerCase())){
                     objetos.add(objetoEncontrado);
                 }
             }
             for (ObjetoEncontrado objeto : objetos) {
-                myAdapter.remove(objeto);
+                filterAdapter.remove(objeto);
             }
         }else{
             ParseQuery<ObjetoEncontrado> query = ParseQuery.getQuery("ObjetoEncontrado");
@@ -88,18 +87,18 @@ public class FilterActivity extends AppCompatActivity {
                     if(e == null){
                         Log.d("Actualización","Actualizada la lista de elementos");
                         ma.list = objects;
-                        myAdapter = new MyAdapter(getApplicationContext(), new ArrayList<ObjetoEncontrado>(ma.list));
+                        filterAdapter = new FilterAdapter(getApplicationContext(), new ArrayList<>(ma.list));
                     }else{
                         Toast.makeText(ma, "Error a la hora de pedir los datos: " + e.getMessage(), Toast.LENGTH_SHORT).show();
                     }
                 }
             });
         }
-        list.setAdapter(myAdapter);
+        list.setAdapter(filterAdapter);
     }
 
     public void backToMap(View view){
-        ma.list = myAdapter.data;
+        ma.list = filterAdapter.getData();
         setResult(RESULT_OK);
         finish();
     }

@@ -1,7 +1,6 @@
 package kryword.recuperalo;
 
 import android.content.Intent;
-import android.content.res.Configuration;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -32,7 +31,7 @@ public class FirstActivity extends AppCompatActivity {
         currentUser = mAuth.getCurrentUser();
         if (currentUser != null){
             Toast.makeText(this, "Se ha conseguido loguear de forma correcta", Toast.LENGTH_SHORT).show();
-            TextView tv = (TextView) findViewById(R.id.userName);
+            TextView tv = findViewById(R.id.userName);
             tv.setText("Conectado como " + currentUser.getDisplayName());
         }else{
             startActivityForResult(
@@ -64,7 +63,7 @@ public class FirstActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == 123 && resultCode == RESULT_OK){
             Toast.makeText(this, "Se ha conseguido loguear de forma correcta", Toast.LENGTH_SHORT).show();
-            TextView tv = (TextView) findViewById(R.id.userName);
+            TextView tv = findViewById(R.id.userName);
             currentUser = mAuth.getCurrentUser();
             tv.setText("Conectado como " + currentUser.getDisplayName());
         }

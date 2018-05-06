@@ -1,16 +1,23 @@
 package kryword.recuperalo;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.BitmapFactory;
 import android.location.Location;
 import android.location.LocationManager;
+import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.mapbox.mapboxsdk.Mapbox;
 import com.mapbox.mapboxsdk.annotations.Marker;
 import com.mapbox.mapboxsdk.annotations.MarkerOptions;
@@ -36,27 +43,30 @@ public class MapLostActivity extends AppCompatActivity {
     private final double LATITUDE_PAMPLONA = 42.8157961;
     private final double LONGITUDE_PAMPLONA = -1.6675312;
 
-    MapView mapView;
-    MainApplication ma;
-    boolean newPos; // Esto sirve para mantener el conocimiento de si hay que actualizar posición de cámara o no
-    LatLng position;
+    private MapView mapView;
+    private MainApplication ma;
+    private boolean newPos; // Esto sirve para mantener el conocimiento de si hay que actualizar posición de cámara o no
+    private LatLng position;
 
-    List<Marker> markers;
+    private List<Marker> markers;
 
+    private FusedLocationProviderClient mFusedLocationClient;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_map_lost);
 
+        mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
+
         // Posición por defecto, es el centro de Pamplona.
         position = new LatLng(LATITUDE_PAMPLONA, LONGITUDE_PAMPLONA);
         newPos = true;
 
         ma = (MainApplication) this.getApplicationContext();
-        getList();
+        getAndModifyList();
         Mapbox.getInstance(this, getString(R.string.access_token));
-        mapView = (MapView) findViewById(R.id.mapView);
+        mapView = findViewById(R.id.mapView);
         mapView.onCreate(savedInstanceState);
 
         mapView.getMapAsync(new OnMapReadyCallback() {
@@ -88,16 +98,16 @@ public class MapLostActivity extends AppCompatActivity {
         finish();
     }
 
-    private void getList() {
+    private void getAndModifyList() {
         ParseQuery<ObjetoEncontrado> query = ParseQuery.getQuery("ObjetoEncontrado");
         query.findInBackground(new FindCallback<ObjetoEncontrado>() {
             public void done(List<ObjetoEncontrado> objects, ParseException e) {
                 if (e == null) {
                     ma.list = objects;
-                    Log.v("query OK ", "getList()");
+                    Log.v("query OK ", "getAndModifyList()");
                     updateMap();
                 } else {
-                    Log.v("error query, reason: " + e.getMessage(), "getList()");
+                    Log.v("error query, reason: " + e.getMessage(), "getAndModifyList()");
                 }
             }
         });
@@ -112,7 +122,7 @@ public class MapLostActivity extends AppCompatActivity {
                     mapboxMap.removeMarker(marker);
                 }
                 Toast.makeText(getBaseContext(), "Actualizado el mapa", Toast.LENGTH_SHORT).show();
-                for (ObjetoEncontrado objeto: ma.list) {
+                for (ObjetoEncontrado objeto : ma.list) {
                     mapboxMap.addMarker(new MarkerOptions()
                             .position(objeto.getLatLngPosition())
                             .title(objeto.getTitle())
@@ -125,33 +135,28 @@ public class MapLostActivity extends AppCompatActivity {
         });
     }
 
-    public void updatePosition(View view){
-        Location location = getLastKnownLocation();
-        if (location != null) {
-            Log.v("LOCATION", "Encontrada localización: " + location);
-            position.setLatitude(location.getLatitude());
-            position.setLongitude(location.getLongitude());
-            newPos = true;
-            updateMap();
+    public void updatePosition(View view) {
+        // Ejecuto esto en caso de que no se hayan dado los permisos a la aplicación,
+        // la aplicación los pedirá y la próxima vez que se pulse el botón este funcionará.
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            String[] permissions = {Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION};
+            ActivityCompat.requestPermissions(this, permissions, 50);
+            return;
         }
-    }
-
-    private Location getLastKnownLocation() {
-        LocationManager mLocationManager = (LocationManager)getApplicationContext().getSystemService(LOCATION_SERVICE);
-        List<String> providers = mLocationManager.getProviders(true);
-        Location bestLocation = null;
-        for (String provider : providers) {
-            // Habría que modificar este SupressLint por otra cosa para mantener la estabilidad.
-            @SuppressLint("MissingPermission") Location l = mLocationManager.getLastKnownLocation(provider);
-            if (l == null) {
-                continue;
-            }
-            if (bestLocation == null || l.getAccuracy() < bestLocation.getAccuracy()) {
-                // Encontrada la mejor localización
-                bestLocation = l;
-            }
-        }
-        return bestLocation;
+        mFusedLocationClient.getLastLocation().addOnSuccessListener(
+                new OnSuccessListener<Location>() {
+                    @Override
+                    public void onSuccess(Location location) {
+                        if (location != null) {
+                            Log.v("LOCATION", "Encontrada localización: " + location);
+                            position.setLatitude(location.getLatitude());
+                            position.setLongitude(location.getLongitude());
+                            newPos = true;
+                            updateMap();
+                        }
+                    }
+                }
+        );
     }
 
     public void filterResults(View view){

@@ -5,8 +5,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
-import android.widget.ArrayAdapter;
-import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.MultiAutoCompleteTextView;
 import android.widget.TextView;
@@ -21,10 +19,9 @@ import com.google.firebase.database.ServerValue;
 import kryword.recuperalo.Modelos.Message;
 
 public class ChatActivity extends AppCompatActivity {
+    private MessageAdapter adapter;
+    private String id;
 
-    ListView chatList;
-    MessageAdapter adapter;
-    String id;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -38,7 +35,7 @@ public class ChatActivity extends AppCompatActivity {
         TextView chatTitle = findViewById(R.id.chatTitle);
         chatTitle.setText("Chat entre " + senderName + " y " + receiverName + " sobre " + topic);
 
-        chatList = findViewById(R.id.messageList);
+        ListView chatList = findViewById(R.id.messageList);
         adapter = new MessageAdapter(this);
         chatList.setAdapter(adapter);
         FirebaseDatabase.getInstance().getReference().child("messages").child(this.id).addChildEventListener(new ChildEventListener() {

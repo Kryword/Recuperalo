@@ -14,16 +14,15 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
-import com.google.firebase.database.ValueEventListener;
 
 import kryword.recuperalo.Modelos.Chat;
 
 public class ChatListActivity extends AppCompatActivity {
-    Query reference1, reference2;
-    ChildEventListener listener1, listener2;
+    private Query reference1, reference2;
+    private ChildEventListener listener1, listener2;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -39,14 +38,16 @@ public class ChatListActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
                 Chat chat = adapter.getItem(position);
-                Intent intent = new Intent(getApplicationContext(), ChatActivity.class);
-                Bundle bundle = new Bundle();
-                bundle.putString("id", chat.getId());
-                bundle.putString("senderName", chat.getSenderName());
-                bundle.putString("receiverName", chat.getReceiverName());
-                bundle.putString("topic", chat.getTopic());
-                intent.putExtras(bundle);
-                startActivity(intent);
+                if (chat != null) {
+                    Intent intent = new Intent(getApplicationContext(), ChatActivity.class);
+                    Bundle bundle = new Bundle();
+                    bundle.putString("id", chat.getId());
+                    bundle.putString("senderName", chat.getSenderName());
+                    bundle.putString("receiverName", chat.getReceiverName());
+                    bundle.putString("topic", chat.getTopic());
+                    intent.putExtras(bundle);
+                    startActivity(intent);
+                }
             }
         });
 

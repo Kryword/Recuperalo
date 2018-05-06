@@ -1,12 +1,12 @@
 package kryword.recuperalo.Modelos;
 
 public class Chat {
-    String id;
-    String sender;
-    String senderName;
-    String receiver;
-    String receiverName;
-    String topic;
+    private String id;
+    private String sender;
+    private String senderName;
+    private String receiver;
+    private String receiverName;
+    private String topic;
 
     public Chat(String id, String sender, String senderName, String receiver, String receiverName, String topic) {
         this.id = id;

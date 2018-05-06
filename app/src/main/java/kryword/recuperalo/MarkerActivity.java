@@ -36,8 +36,8 @@ public class MarkerActivity extends AppCompatActivity {
 
     final static int REQUEST_CODE_MODIFY = 100;
 
-    MapView mapView;
-    MainApplication ma;
+    private MapView mapView;
+    private MainApplication ma;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,9 +49,9 @@ public class MarkerActivity extends AppCompatActivity {
         ma = (MainApplication)getApplicationContext();
         Intent intent = getIntent();
         Bundle bundle = intent.getExtras();
-        final TextView title = (TextView) findViewById(R.id.title);
-        TextView description = (TextView) findViewById(R.id.description);
-        Button button = (Button) findViewById(R.id.contact);
+        final TextView title = findViewById(R.id.title);
+        TextView description = findViewById(R.id.description);
+        Button button = findViewById(R.id.contact);
 
         // Este es el id del marcador dentro de la lista de puntos, puedo usar esto para obtener todos los datos
         LatLng markerPos = new LatLng(bundle.getDouble("lat"), bundle.getDouble("long"));
@@ -108,7 +108,7 @@ public class MarkerActivity extends AppCompatActivity {
         Log.i("Datos del objeto:", position + "; " + objTitle + "; " + objDescription);
 
         Mapbox.getInstance(this, getString(R.string.access_token));
-        mapView = (MapView)findViewById(R.id.viewMap);
+        mapView = findViewById(R.id.viewMap);
 
         if (mapView != null) {
             mapView.onCreate(savedInstanceState);

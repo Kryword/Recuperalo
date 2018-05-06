@@ -1,14 +1,23 @@
 package kryword.recuperalo;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.location.Location;
 import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.mapbox.mapboxsdk.Mapbox;
 import com.mapbox.mapboxsdk.annotations.MarkerOptions;
+import com.mapbox.mapboxsdk.camera.CameraUpdateFactory;
 import com.mapbox.mapboxsdk.geometry.LatLng;
 import com.mapbox.mapboxsdk.maps.MapView;
 import com.mapbox.mapboxsdk.maps.MapboxMap;
@@ -20,10 +29,16 @@ import kryword.recuperalo.Modelos.ObjetoEncontrado;
 
 public class MapFoundActivity extends AppCompatActivity {
 
+    private final double ZOOM = 14f;
+    private final double LATITUDE_PAMPLONA = 42.8157961;
+    private final double LONGITUDE_PAMPLONA = -1.6675312;
     private final int REQUEST_CODE = 1;
 
-    MapView mapView;
-    MainApplication ma;
+    private MapView mapView;
+    private MainApplication ma;
+
+    private LatLng position;
+    private FusedLocationProviderClient mFusedLocationClient;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,12 +49,16 @@ public class MapFoundActivity extends AppCompatActivity {
 
         ma = (MainApplication) this.getApplicationContext();
 
+        mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
+        // Posición por defecto, es el centro de Pamplona.
+        position = new LatLng(LATITUDE_PAMPLONA, LONGITUDE_PAMPLONA);
 
-        mapView = (MapView)findViewById(R.id.mapView);
+        mapView = findViewById(R.id.mapView);
         mapView.onCreate(savedInstanceState);
         mapView.getMapAsync(new OnMapReadyCallback() {
             @Override
             public void onMapReady(final MapboxMap mapboxMap) {
+                mapboxMap.moveCamera(CameraUpdateFactory.newLatLngZoom(position, ZOOM));
                 mapboxMap.addOnMapLongClickListener(new MapboxMap.OnMapLongClickListener() {
                     @Override
                     public void onMapLongClick(@NonNull LatLng point) {
@@ -98,5 +117,33 @@ public class MapFoundActivity extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    public void updatePosition(View view) {
+        // Ejecuto esto en caso de que no se hayan dado los permisos a la aplicación,
+        // la aplicación los pedirá y la próxima vez que se pulse el botón este funcionará.
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            String[] permissions = {Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION};
+            ActivityCompat.requestPermissions(this, permissions, 50);
+            return;
+        }
+        mFusedLocationClient.getLastLocation().addOnSuccessListener(
+                new OnSuccessListener<Location>() {
+                    @Override
+                    public void onSuccess(Location location) {
+                        if (location != null) {
+                            Log.v("LOCATION", "Encontrada localización: " + location);
+                            position.setLatitude(location.getLatitude());
+                            position.setLongitude(location.getLongitude());
+                            mapView.getMapAsync(new OnMapReadyCallback() {
+                                @Override
+                                public void onMapReady(final MapboxMap mapboxMap) {
+                                    mapboxMap.moveCamera(CameraUpdateFactory.newLatLngZoom(position, ZOOM));
+                                }
+                            });
+                        }
+                    }
+                }
+        );
     }
 }

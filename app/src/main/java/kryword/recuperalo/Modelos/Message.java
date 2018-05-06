@@ -3,10 +3,10 @@ package kryword.recuperalo.Modelos;
 import com.google.firebase.database.ServerValue;
 
 public class Message {
-    String sender;
-    String chatId;
-    String message;
-    Object timestamp = ServerValue.TIMESTAMP;
+    private String sender;
+    private String chatId;
+    private String message;
+    private Object timestamp = ServerValue.TIMESTAMP;
 
     public Message(String sender, String chatId, String message, Object timestamp) {
         this.sender = sender;

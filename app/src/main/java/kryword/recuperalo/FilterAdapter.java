@@ -11,13 +11,11 @@ import java.util.List;
 
 import kryword.recuperalo.Modelos.ObjetoEncontrado;
 
-public class MyAdapter extends BaseAdapter {
-    Context context;
-    List<ObjetoEncontrado> data;
+public class FilterAdapter extends BaseAdapter {
+    private List<ObjetoEncontrado> data;
     private static LayoutInflater inflater = null;
 
-    public MyAdapter(Context context, List<ObjetoEncontrado> data){
-        this.context = context;
+    public FilterAdapter(Context context, List<ObjetoEncontrado> data){
         this.data = data;
         inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
@@ -43,9 +41,9 @@ public class MyAdapter extends BaseAdapter {
         if (vi == null){
             vi = inflater.inflate(R.layout.item_objeto, null);
         }
-        TextView title = (TextView) vi.findViewById(R.id.title);
-        TextView description = (TextView) vi.findViewById(R.id.description);
-        TextView user = (TextView) vi.findViewById(R.id.user);
+        TextView title = vi.findViewById(R.id.title);
+        TextView description = vi.findViewById(R.id.description);
+        TextView user = vi.findViewById(R.id.user);
         ObjetoEncontrado element = data.get(position);
         title.setText(element.getTitle() + ":");
         description.setText(element.getDescription());
@@ -54,5 +52,9 @@ public class MyAdapter extends BaseAdapter {
     }
     public void remove(ObjetoEncontrado object){
         data.remove(object);
+    }
+
+    public List<ObjetoEncontrado> getData() {
+        return data;
     }
 }

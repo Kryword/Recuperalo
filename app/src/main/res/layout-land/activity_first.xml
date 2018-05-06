@@ -21,7 +21,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
-        android:id="@+id/logout2"
+        android:id="@+id/logout"
         android:layout_width="0dp"
         android:layout_height="50dp"
         android:layout_marginBottom="8dp"
@@ -34,11 +34,11 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/imageicon"
-        app:layout_constraintTop_toBottomOf="@+id/button2"
+        app:layout_constraintTop_toBottomOf="@+id/lost"
         tools:text="Cerrar Sesión" />
 
     <Button
-        android:id="@+id/button2"
+        android:id="@+id/lost"
         android:layout_width="0dp"
         android:layout_height="50dp"
         android:layout_marginBottom="8dp"
@@ -46,14 +46,14 @@
         android:layout_marginTop="8dp"
         android:onClick="perdido"
         android:text="He perdido un objeto"
-        app:layout_constraintBottom_toTopOf="@+id/logout2"
+        app:layout_constraintBottom_toTopOf="@+id/logout"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/imageicon"
-        app:layout_constraintTop_toBottomOf="@+id/button" />
+        app:layout_constraintTop_toBottomOf="@+id/found" />
 
     <Button
-        android:id="@+id/button"
+        android:id="@+id/found"
         android:layout_width="0dp"
         android:layout_height="50dp"
         android:layout_marginBottom="8dp"
@@ -62,15 +62,15 @@
         android:layout_marginTop="8dp"
         android:onClick="encontrado"
         android:text="He encontrado un objeto"
-        app:layout_constraintBottom_toTopOf="@+id/button2"
+        app:layout_constraintBottom_toTopOf="@+id/lost"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/imageicon"
-        app:layout_constraintTop_toBottomOf="@id/button4"
+        app:layout_constraintTop_toBottomOf="@id/chatListButton"
         app:layout_constraintVertical_chainStyle="packed" />
 
     <Button
-        android:id="@+id/button4"
+        android:id="@+id/chatListButton"
         android:layout_width="0dp"
         android:layout_height="50dp"
         android:layout_marginBottom="8dp"
@@ -79,7 +79,7 @@
         android:layout_marginTop="8dp"
         android:onClick="listaChats"
         android:text="Mostrar conversaciones abiertas"
-        app:layout_constraintBottom_toTopOf="@+id/button"
+        app:layout_constraintBottom_toTopOf="@+id/found"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/imageicon"
         app:layout_constraintTop_toBottomOf="@+id/userName" />
@@ -92,7 +92,7 @@
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/button2"
+        app:layout_constraintEnd_toStartOf="@id/lost"
         app:layout_constraintHorizontal_chainStyle="spread"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/userName"

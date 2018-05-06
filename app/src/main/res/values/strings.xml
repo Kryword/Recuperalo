@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">Recuperalo</string>
     <string name="access_token">pk.eyJ1Ijoia3J5d29yZCIsImEiOiJjamRqNW5oYWkxNzA4Mnlwb2dzc3oxejFlIn0.Q0H58_JUje9Ggwme8tjXag</string>
+    <string name="holdForNewObject">Mantén pulsado para añadir un nuevo objeto</string>
 </resources>

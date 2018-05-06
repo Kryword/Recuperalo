@@ -7,10 +7,10 @@ import android.view.View;
 import android.widget.EditText;
 
 public class FoundActivity extends AppCompatActivity {
-    Double lat, lon;
-    String title, description;
-    EditText titleText;
-    EditText descriptionText;
+    private Double lat, lon;
+    private String title, description;
+    private EditText titleText, descriptionText;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

@@ -17,9 +17,9 @@ import kryword.recuperalo.Modelos.Message;
 
 public class MessageAdapter extends BaseAdapter {
 
-    List<Message> data;
-    LayoutInflater inflater = null;
-    Activity a;
+    private List<Message> data;
+    private LayoutInflater inflater;
+    private Activity a;
 
     public MessageAdapter(Activity a){
         this.a = a;
