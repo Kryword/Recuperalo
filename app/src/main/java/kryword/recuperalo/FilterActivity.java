@@ -79,6 +79,7 @@ public class FilterActivity extends AppCompatActivity {
             for (ObjetoEncontrado objeto : objetos) {
                 filterAdapter.remove(objeto);
             }
+            list.setAdapter(filterAdapter);
         }else{
             ParseQuery<ObjetoEncontrado> query = ParseQuery.getQuery("ObjetoEncontrado");
             query.findInBackground(new FindCallback<ObjetoEncontrado>() {
@@ -88,13 +89,14 @@ public class FilterActivity extends AppCompatActivity {
                         Log.d("Actualización","Actualizada la lista de elementos");
                         ma.list = objects;
                         filterAdapter = new FilterAdapter(getApplicationContext(), new ArrayList<>(ma.list));
+                        list.setAdapter(filterAdapter);
                     }else{
                         Toast.makeText(ma, "Error a la hora de pedir los datos: " + e.getMessage(), Toast.LENGTH_SHORT).show();
                     }
                 }
             });
         }
-        list.setAdapter(filterAdapter);
+
     }
 
     public void backToMap(View view){
