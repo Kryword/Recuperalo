@@ -35,7 +35,7 @@ public class ChatActivity extends AppCompatActivity {
         TextView chatTitle = findViewById(R.id.chatTitle);
         chatTitle.setText("Chat entre " + senderName + " y " + receiverName + " sobre " + topic);
 
-        ListView chatList = findViewById(R.id.messageList);
+        final ListView chatList = findViewById(R.id.messageList);
         adapter = new MessageAdapter(this);
         chatList.setAdapter(adapter);
         FirebaseDatabase.getInstance().getReference().child("messages").child(this.id).addChildEventListener(new ChildEventListener() {
@@ -45,6 +45,7 @@ public class ChatActivity extends AppCompatActivity {
                     Message message = dataSnapshot.getValue(Message.class);
                     adapter.add(message);
                     adapter.notifyDataSetChanged();
+                    chatList.setSelection(adapter.getCount() - 1);
                 }
             }
 

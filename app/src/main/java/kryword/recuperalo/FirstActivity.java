@@ -30,7 +30,6 @@ public class FirstActivity extends AppCompatActivity {
         super.onStart();
         currentUser = mAuth.getCurrentUser();
         if (currentUser != null){
-            Toast.makeText(this, "Se ha conseguido loguear de forma correcta", Toast.LENGTH_SHORT).show();
             TextView tv = findViewById(R.id.userName);
             tv.setText("Conectado como " + currentUser.getDisplayName());
         }else{
